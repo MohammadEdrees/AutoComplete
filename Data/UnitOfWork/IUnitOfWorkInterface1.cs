@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Infra.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
         IProductRepository ProductRepository { get; }
         void Commit();
         void Rollback();
         Task CommitAsync();
-        Task RollbackAsync();
+     
     }
 }
