@@ -131,6 +131,6 @@
   },
   "defaultProject": "AutoComplete",
   "cli": {
-    "analytics": false
+    "analytics": "dca3d6b2-ae1f-47a9-8132-db96dc78e4d3"
   }
 }

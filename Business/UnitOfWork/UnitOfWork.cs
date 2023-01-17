@@ -1,14 +1,7 @@
 ﻿using Data.Context;
 using Domain.Repositories;
-using Infra.Entities.Products;
 using Infra.Repositories;
 using Infra.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.UnitOfWork
 {
@@ -33,14 +26,16 @@ namespace Domain.UnitOfWork
             await _context.SaveChangesAsync();
         }
 
-        public void Rollback()
+        public void Dispose()
         {
-            _context.Dispose();
+            GC.SuppressFinalize(this);
         }
 
-        public async Task RollbackAsync()
+        public void Rollback()
         {
-            await _context.DisposeAsync();
+           Dispose();
         }
+
+      
     }
 }

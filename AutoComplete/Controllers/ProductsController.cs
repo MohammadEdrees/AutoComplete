@@ -9,7 +9,15 @@ namespace AutoComplete.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-       public IProduct Product { get; set; }
+        //public IProduct Product { get; set; }
+        private readonly IProduct Product;
+
+        public ProductsController(IProduct product)
+        {
+            Product = product;
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Search(string text, int num = 0)
         {
             IEnumerable<ProductDto> results = await  Product.SearchProducts(text, num);  
