@@ -1,0 +1,5 @@
+.resultContainer{
+    background-color: aqua;
+    margin-top: .2%;
+    overflow-y: scroll;
+}
