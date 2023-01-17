@@ -1,51 +1,49 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { fromEvent} from 'rxjs';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { debounceTime, distinctUntilChanged, filter, fromEvent, pluck } from 'rxjs';
 import { product } from '../models/product';
 import { searchService } from '../services/search.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls:['./home.component.css']
 })
-export class HomeComponent implements OnInit{
+
+export class HomeComponent implements AfterViewInit {
   buttonSubscription: any;
-  constructor(private searchService: searchService) {}
-  searchResult:product[]= new Array<product>();
-  @ViewChild('searchInput', {static: false}) input!: ElementRef;
+  constructor(private searchService: searchService) { }
+  searchResult: product[] = new Array<product>();
+  @ViewChild('searchInput') searchInput!: ElementRef;
   ngOnInit(): void {
-    console.log("on init")
-    console.log(this.searchResult)
+   }
+ 
+  ngAfterViewInit() {
+
+     fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+      pluck("target", "value"),
+      filter((val: any) => val.length > 2),
+      debounceTime(444),
+      distinctUntilChanged(),
+    ).subscribe(search => {
+      this.SearchFunc(search);
+    })
+
   }
-  onTextChange(changedText: string) {
-      this.searchService
-      .searchFromApi(changedText)
-      .subscribe((response:product[])=>{
-          console.log(response)
-          this.searchResult=response;
-          console.table(this.searchResult[0])
-        },
+
+
+  SearchFunc(text: any) {
+    this.searchService
+      .searchFromApi(text)
+      .subscribe((response: product[]) => {
+        console.log(response)
+        this.searchResult = response;
+         console.log("To Server")
+      },
         errorResponse => {
           console.error(errorResponse);
         }
       );
-   
   }
-  inputChange() {
-    this.buttonSubscription =  fromEvent(this.input.nativeElement, 'keyup')
-        .subscribe(res => console.log(res));
-  }
-  ngAfterViewInit() {
-    this.inputChange();
-  }
-  ngOnDestroy() {
-    this.buttonSubscription.unsubscribe()
-  }
- 
- 
-  //  cancelPendingRequests() {
-  //   this.searchResult.forEach(sub => sub.unsubscribe());
-  //  }
-
 
 }
 

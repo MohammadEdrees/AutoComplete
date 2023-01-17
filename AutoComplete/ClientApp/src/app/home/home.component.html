@@ -1,7 +1,7 @@
-<input #searchInput type="text" placeholder=" enter text here " class="form-control" (keyup)="onTextChange(searchInput.value)"/>
-<div  class="w-100 h-100 text-primary">
-    <ul>
-        <li *ngFor="let item of searchResult" > {{item.description}}</li>
-    </ul>
+<input #searchInput type="text" placeholder=" enter text here " class="form-control" />
+<div  class="w-100 h-100 text-primary resultContainer">
+    <ul *ngIf="searchResult.length>0">
+        <li *ngFor="let item of searchResult"> {{item.description}}</li>
+     </ul>
+
 </div>
- 
